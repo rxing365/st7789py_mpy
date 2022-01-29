@@ -1,7 +1,7 @@
 Slow ST7789 driver for MicroPython
 ==================================
 
-I added a version to make it works on CircuitPython(still in progress, not all functions work for now)
+I added a CircuitPython version(still in progress, not all functions work for now)
 
 This is a slow MicroPython driver for 240x240 ST7789 display without CS pin 
 from Ali Express. It also supports 135x240 TTGO Display
