@@ -4,11 +4,6 @@ import digitalio
 import time
 from micropython import const
 import struct
-import random
-
-cs = digitalio.DigitalInOut(board.GP18)
-cs.direction = digitalio.Direction.OUTPUT
-cs.value = False
 
 # commands
 ST7789_NOP = const(0x00)
@@ -738,29 +733,19 @@ class ST7789():
             self._text8(font, text, x0, y0, color, background)
         else:
             self._text16(font, text, x0, y0, color, background)
+    
+    def rect(self, x, y, w, h, color):
+        """
+        Draw a rectangle at the given location, size and color.
 
-
-st7789_res = 0
-st7789_dc  = 1
-disp_width = 240
-disp_height = 135
-CENTER_Y = int(disp_width/2)
-CENTER_X = int(disp_height/2)
-reset = digitalio.DigitalInOut(board.GP0)
-reset.direction = digitalio.Direction.OUTPUT
-dc = digitalio.DigitalInOut(board.GP1)
-dc.direction = digitalio.Direction.OUTPUT
-
-spi = busio.SPI(clock=board.GP2, MOSI=board.GP3)
-spi.try_lock()
-spi.configure(baudrate=4000000, phase=1, polarity=1)
-
-display = ST7789(spi, disp_width, disp_width,
-                          reset=reset,
-                          dc=dc,
-                          xstart=0, ystart=0, rotation=0)
-display.fill(GREEN)
-for i in range(5000):
-    display.pixel(random.randint(0, disp_width),
-          random.randint(0, disp_height),
-          color565(random.getrandbits(8),random.getrandbits(8),random.getrandbits(8)))
+        Args:
+            x (int): Top left corner x coordinate
+            y (int): Top left corner y coordinate
+            width (int): Width in pixels
+            height (int): Height in pixels
+            color (int): 565 encoded color
+        """
+        self.hline(x, y, w, color)
+        self.vline(x, y, h, color)
+        self.vline(x + w - 1, y, h, color)
+        self.hline(x, y + h - 1, w, color)
